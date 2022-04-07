@@ -47,8 +47,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_29_165504) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "comments", "tasks", on_delete: :cascade
-  add_foreign_key "comments", "users", on_delete: :cascade
+  add_foreign_key "comments", "tasks"
+  add_foreign_key "comments", "users"
   add_foreign_key "tasks", "users", column: "assignee_id"
   add_foreign_key "tasks", "users", column: "creator_id"
 end
