@@ -13,22 +13,25 @@ class Task < ApplicationRecord
   validates :creator_id, presence: true
 
   def self.weekday_code(day)
+    return 0 if day == 'Sunday'
     return 1 if day == 'Monday'
     return 2 if day == 'Tuesday'
     return 3 if day == 'Wednesday'
     return 4 if day == 'Thursday'
     return 5 if day == 'Friday'
     return 6 if day == 'Saturday'
-    return 7 if day == 'Sunday'
   end
 
   def self.last_weekday?
     date = Date.today
     diff = ((date + 7).year * 12 + (date + 7).month) - (date.year * 12 + date.month)
-    puts diff
-    return true if diff
+    return false if diff.zero?
 
-    false
+    true
+  end
+
+  def self.get_week_code
+    (Date.today.to_date.strftime('%d').to_f / 7).ceil
   end
 
   def self.task_recreate
@@ -40,7 +43,7 @@ class Task < ApplicationRecord
       today_day = Date.today.strftime('%A')
       day_code = weekday_code(today_day).to_s
       recurring_code = (weekday_code + day_code).to_i
-      task_last_weekday = Task.where(recurring_code: recurring_code)
+      task_last_weekday = Task.where(recurring_code:)
       task_last_weekday.each do |task|
         Task.create(title: task.title, body: task.body, creator_id: task.creator_id, assignee_id: task.assignee_id, status: false,
                     due_date: today_date + 30, recurring_code: 0)
@@ -48,9 +51,10 @@ class Task < ApplicationRecord
     else
       today_day = Date.today.strftime('%A')
       day_code = weekday_code(today_day).to_s
-      week_code = Time.now.week_of_month.to_s
+      week_code = get_week_code.to_s
+
       recurring_code = (week_code + day_code).to_i
-      tasks = Task.where(recurring_code: recurring_code)
+      tasks = Task.where(recurring_code:)
       tasks.each do |task|
         Task.create(title: task.title, body: task.body, creator_id: task.creator_id, assignee_id: task.assignee_id, status: false,
                     due_date: today_date + 30, recurring_code: 0)
