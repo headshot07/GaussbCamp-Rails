@@ -10,7 +10,6 @@ class TasksController < ApplicationController
   end
 
   def create
-    puts params
     user = User.find(params[:user_id])
     task = user.creator_tasks.new(task_params)
     if task.save
@@ -26,14 +25,14 @@ class TasksController < ApplicationController
   end
 
   def change_status
-    puts params[:status]
     task = Task.find(params[:task_id])
     task.update(status: params[:status])
     render json: {}, status: 200
   end
 
   def destroy
-    Task.delete(params[:id])
+    Task.destroy(params[:id])
+    #Task.delete(params[:id])
     render json: {}, status: 200
   end
 
