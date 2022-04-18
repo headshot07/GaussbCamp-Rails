@@ -3,11 +3,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
-  resources :users do
-    resources :tasks do
-      resources :comments
+  namespace :api do
+    resources :users do
+      resources :tasks do
+        resources :comments
+      end
     end
+    resources :sessions
+    post 'tasks/:task_id/edit', to: 'tasks#change_status'
   end
-  resources :sessions
-  post 'tasks/:task_id/edit', to: 'tasks#change_status'
 end
