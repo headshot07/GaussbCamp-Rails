@@ -22,7 +22,7 @@ RSpec.describe 'Tasks', type: :request do
 
   describe 'GET /index' do
     it 'should render a successful response' do
-      get user_tasks_path(user_id: @creator.id), headers: { 'Authorization' => "Bearer #{@token}" }
+      get api_user_tasks_path(user_id: @creator.id), headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
     end
   end
@@ -30,14 +30,14 @@ RSpec.describe 'Tasks', type: :request do
   describe 'POST /create' do
     it 'should create a task and render successful response' do
       before_count = Task.count
-      post user_tasks_path(user_id: @creator.id), params: { task: valid_attributes }, headers: { 'Authorization' => "Bearer #{@token}" }
+      post api_user_tasks_path(user_id: @creator.id), params: { task: valid_attributes }, headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
       expect(Task.count).to_not eq(before_count)
     end
 
     it 'should not create a task and render unsuccessful response' do
       before_count = Task.count
-      post user_tasks_path(user_id: @creator.id), params: { task: invalid_attributes }, headers: { 'Authorization' => "Bearer #{@token}" }
+      post api_user_tasks_path(user_id: @creator.id), params: { task: invalid_attributes }, headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(501)
       expect(Task.count).to eq(before_count)
     end
@@ -47,7 +47,7 @@ RSpec.describe 'Tasks', type: :request do
     it 'should render the successful response' do
       task = Task.create(title: 'Assignment Third', body: 'Complete the third assignment.', assignee_id: @assignee.id,
                          creator_id: @creator.id)
-      get user_task_path(user_id: @creator.id, id: task.id), headers: { 'Authorization' => "Bearer #{@token}" }
+      get api_user_task_path(user_id: @creator.id, id: task.id), headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
     end
   end
@@ -56,7 +56,7 @@ RSpec.describe 'Tasks', type: :request do
     it 'should update the status of task' do
       task = Task.create(title: 'Assignment Third', body: 'Complete the third assignment.', assignee_id: @assignee.id,
                          creator_id: @creator.id, status: false)
-      post "/tasks/#{task.id}/edit", params: { status: true }, headers: { 'Authorization' => "Bearer #{@token}" }
+      post "/api/tasks/#{task.id}/edit", params: { status: true }, headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
     end
   end

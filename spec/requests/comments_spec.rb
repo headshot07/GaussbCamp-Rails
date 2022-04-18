@@ -24,7 +24,7 @@ RSpec.describe 'Comments', type: :request do
 
   describe 'GET /index' do
     it 'should render successful response' do
-      get user_task_comments_path(user_id: @creator.id, task_id: @task.id),
+      get api_user_task_comments_path(user_id: @creator.id, task_id: @task.id),
           headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
     end
@@ -33,7 +33,7 @@ RSpec.describe 'Comments', type: :request do
   describe 'POST /create' do
     it 'should create a comment on the task' do
       before_count = Comment.count
-      post user_task_comments_path(user_id: @creator.id, task_id: @task.id), params: { comment: valid_attributes },
+      post api_user_task_comments_path(user_id: @creator.id, task_id: @task.id), params: { comment: valid_attributes },
                                                                              headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
       expect(Comment.count).to_not eq(before_count)
@@ -41,7 +41,7 @@ RSpec.describe 'Comments', type: :request do
 
     it 'should not create a comment on the task' do
       before_count = Comment.count
-      post user_task_comments_path(user_id: @creator.id, task_id: @task.id), params: { comment: invalid_attributes },
+      post api_user_task_comments_path(user_id: @creator.id, task_id: @task.id), params: { comment: invalid_attributes },
                                                                              headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(501)
       expect(Comment.count).to eq(before_count)
@@ -51,7 +51,7 @@ RSpec.describe 'Comments', type: :request do
   describe 'DELETE /destroy' do
     it 'should delete the comment' do
       comment = Comment.create(body: 'New Comment', user_id: @creator.id, task_id: @task.id)
-      delete user_task_comment_path(user_id: @creator.id, task_id: @task.id, id: comment.id), headers: { 'Authorization' => "Bearer #{@token}" }
+      delete api_user_task_comment_path(user_id: @creator.id, task_id: @task.id, id: comment.id), headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
     end
   end
