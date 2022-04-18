@@ -8,7 +8,7 @@ RSpec.describe 'Sessions', type: :request do
   end
   describe 'POST /create' do
     it 'should create a new login/session' do
-      post sessions_path, params: { user: { email: 'sanjay123@gmail.com', password: 'password123' } }
+      post api_sessions_path, params: { user: { email: 'sanjay123@gmail.com', password: 'password123' } }
       expect(response).to have_http_status(200)
     end
   end

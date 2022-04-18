@@ -19,7 +19,7 @@ RSpec.describe 'Users', type: :request do
 
   describe 'GET /index' do
     it 'should render a successful response' do
-      get users_url, headers: { 'Authorization' => "Bearer #{@token}" }
+      get api_users_url, headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
     end
   end
@@ -27,14 +27,14 @@ RSpec.describe 'Users', type: :request do
   describe 'POST /create' do
     it 'should create the user and render successful response' do
       before_count = User.count
-      post users_url, params: { user: valid_attributes }, headers: { 'Authorization' => "Bearer #{@token}" }
+      post api_users_url, params: { user: valid_attributes }, headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
       expect(User.count).not_to eq(before_count)
     end
 
     it 'should not create the user and render unsuccessful response' do
       before_count = User.count
-      post users_url, params: { user: invalid_attributes }
+      post api_users_url, params: { user: invalid_attributes }
       expect(response).to have_http_status(501)
       expect(User.count).to eq(before_count)
     end
@@ -42,14 +42,14 @@ RSpec.describe 'Users', type: :request do
 
   describe 'GET /show' do
     it 'should show the user details' do
-      get user_path(@user.id), headers: { 'Authorization' => "Bearer #{@token}" }
+      get api_user_path(@user.id), headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
     end
   end
 
   describe 'POST /update' do
     it 'should update the user' do
-      put user_path(@user.id),
+      put api_user_path(@user.id),
           params: { user: { first_name: 'Sanjay', last_name: 'Singh', email: 'sanjay.singh123@gaussb.com' } },
           headers: { 'Authorization' => "Bearer #{@token}" }
       expect(response).to have_http_status(200)
