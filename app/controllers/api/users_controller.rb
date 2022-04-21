@@ -22,9 +22,13 @@ class Api::UsersController < ApplicationController
   end
 
   def update
+    original_user = User.find(params[:id])
     user = User.find(params[:id])
-    user.update(user_update_params)
-    render json: { user: UserSerializer.new(user) }, status: 200
+    if user.update(user_update_params)
+      render json: { user: UserSerializer.new(user) }, status: 200
+    else
+      render json: { user: UserSerializer.new(original_user) }, status: 200
+    end
   end
 
   def show
