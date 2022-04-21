@@ -17,9 +17,11 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+  host: tasks-postgres
+  username: postgres
+  password: password
 
 development:
   <<: *default
@@ -82,5 +84,3 @@ test:
 production:
   <<: *default
   database: gaussb_camp_production
-  username: gaussbcamp
-  password: password
